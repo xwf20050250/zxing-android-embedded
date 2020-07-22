@@ -1,3 +1,21 @@
+### 4.1.0 (2020-01-07)
+
+* Ability to hide the laser in ViewfinderView (#503).
+* Make possibleResultPoints method in BarcodeCallback optional (#504).
+* Ability to customize or disable the permission error dialog (#505).
+
+### 4.0.2 (2019-09-07)
+
+* Use androidx.
+* Use zxing:core 3.4.0 by default.
+* Minimum SDK version 24.
+* Fix ArithmeticException.
+* Fix ResultPoint locations when camera is mirrored.
+
+### 4.0.0 / 4.0.1 (2019-09-07)
+
+* Broken release - use 4.0.2.
+
 ### 3.6.0 (2018-03-04)
 
 * Use zxing:core 3.3.2 by default (#360).

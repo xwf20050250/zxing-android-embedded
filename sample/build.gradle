@@ -2,13 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion project.androidTargetSdk
-    buildToolsVersion project.androidBuildTools
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 24
         targetSdkVersion project.androidTargetSdk
-        versionCode 360
-        versionName "3.6.0"
+        versionCode 410
+        versionName "4.1.0"
     }
 
     def validConfig
@@ -22,9 +21,9 @@ android {
         keystoreFile = properties.getProperty('keystore.file')
         keystorePassword = properties.getProperty('keystore.password')
         keystoreAlias = properties.getProperty('keystore.alias')
-        validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null;
+        validConfig = keystoreFile != null && keystorePassword != null && keystoreAlias != null
     } catch (error) {
-        validConfig = false;
+        validConfig = false
     }
 
     if (validConfig) {
@@ -51,22 +50,26 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 
 dependencies {
     // If you use this from an external project, use the following instead:
-    //   compile 'com.journeyapps:zxing-android-embedded:<version>'
+    //   implementation 'com.journeyapps:zxing-android-embedded:<version>'
     implementation project(':zxing-android-embedded')
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 
     // leakcanary is for development purposes only
     // https://github.com/square/leakcanary
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v13:27.1.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // AboutLibraries
-    implementation "com.mikepenz:aboutlibraries:6.1.1"
-
+    implementation "com.mikepenz:aboutlibraries:6.2.3"
 }

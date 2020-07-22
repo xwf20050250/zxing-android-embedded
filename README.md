@@ -13,13 +13,11 @@ Features:
 
 A sample application is available in [Releases](https://github.com/journeyapps/zxing-android-embedded/releases).
 
-By default, Android SDK 19+ is required because of `zxing:core` 3.3.2.
-To support SDK 14+, downgrade `zxing:core` to 3.3.0 -
-see [instructions](#adding-aar-dependency-with-gradle).
+By default, Android SDK 24+ is required because of `zxing:core` 3.4.0. To support SDK 14+, see [Older SDK versions](#older-sdk-versions). 
 
 ## Adding aar dependency with Gradle
 
-From version 3.6.0, only Android SDK 19+ is supported by default.
+From version 4.x, only Android SDK 24+ is supported by default, and androidx is required.
 
 Add the following to your `build.gradle` file:
 
@@ -29,17 +27,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.android.support:appcompat-v7:25.3.1'   // Minimum 23+ is required
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
 android {
-    buildToolsVersion '27.0.3' // Older versions may give compile errors
+    buildToolsVersion '28.0.3' // Older versions may give compile errors
 }
 
 ```
 
-For Android 14+ support, downgrade `zxing:core` to 3.3.0 or earlier:
+## Older SDK versions
+
+For Android SDK versions < 24, you can downgrade `zxing:core` to 3.3.0 or earlier for Android 14+ support:
 
 ```groovy
 repositories {
@@ -47,20 +47,27 @@ repositories {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-    implementation 'com.android.support:appcompat-v7:25.3.1'   // Version 23+ is required
+    implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.zxing:core:3.3.0'
 }
 
 android {
-    buildToolsVersion '27.0.3' // Older versions may give compile errors
+    buildToolsVersion '28.0.3'
 }
 
 ```
+You'll also need this in your Android manifest:
+
+```xml
+<uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+```
+
+No guarantees are made on support for older SDK versions - you'll have to test to make sure it's compatible.
 
 ## Hardware Acceleration
 
-Hardware accelation is required since TextureView is used.
+Hardware acceleration is required since TextureView is used.
 
 Make sure it is enabled in your manifest file:
 
@@ -125,6 +132,10 @@ try {
 } catch(Exception e) {
 
 }
+
+No customization of the image is currently supported, including changing colors or padding. If you
+require more customization, copy and modify the source for the encoder.
+
 ```
 
 ### Changing the orientation
@@ -152,6 +163,8 @@ See [EMBEDDING](EMBEDDING.md).
 
 For more advanced options, look at the [Sample Application](https://github.com/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/MainActivity.java),
 and browse the source code of the library.
+
+This is considered advanced usage, and is not well-documented or supported.
 
 ## Android Permissions
 

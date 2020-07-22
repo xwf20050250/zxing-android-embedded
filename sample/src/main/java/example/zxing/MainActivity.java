@@ -3,8 +3,8 @@ package example.zxing;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,8 +128,14 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
 
         if(result.getContents() == null) {
-            Log.d("MainActivity", "Cancelled scan");
-            Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            Intent originalIntent = result.getOriginalIntent();
+            if (originalIntent == null) {
+                Log.d("MainActivity", "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                Toast.makeText(this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+            }
         } else {
             Log.d("MainActivity", "Scanned");
             Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
@@ -156,13 +162,8 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_scan, container, false);
-            Button scan = (Button) view.findViewById(R.id.scan_from_fragment);
-            scan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    scanFromFragment();
-                }
-            });
+            Button scan = view.findViewById(R.id.scan_from_fragment);
+            scan.setOnClickListener(v -> scanFromFragment());
             return view;
         }
 
